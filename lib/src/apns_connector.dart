@@ -1,10 +1,10 @@
 import 'dart:async';
 
 import 'package:firebase_messaging/firebase_messaging.dart' as Firebase;
-import 'package:flutter_apns/connector.dart';
+import 'package:flutter_apns/src/connector.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart' hide MessageHandler;
-export 'package:flutter_apns/connector.dart';
+export 'package:flutter_apns/src/connector.dart';
 
 class ApnsPushConnector extends PushConnector {
   final MethodChannel _channel = const MethodChannel('flutter_apns');

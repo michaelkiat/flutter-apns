@@ -1,4 +1,4 @@
-import 'package:flutter_apns/apns.dart';
+import 'package:flutter_apns/flutter_apns.dart';
 import 'package:flutter/material.dart';
 
 import 'storage.dart';
@@ -15,17 +15,17 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final connector = createPushConnector();
+  final PushConnector connector = createPushConnector();
 
   @override
   void initState() {
     super.initState();
 
     connector.configure(
-      onLaunch: onPush,
-      onResume: onPush,
-      onMessage: onPush,
-      onBackgroundMessage: onBackgroundPush,
+      onLaunch: (data) => onPush('onLaunch', data),
+      onResume: (data) => onPush('onResume', data),
+      onMessage: (data) => onPush('onMessage', data),
+      onBackgroundMessage: _onBackgroundMessage,
     );
     connector.token.addListener(() {
       print('Token ${connector.token.value}');
@@ -40,23 +40,34 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: const Text('Plugin example app'),
         ),
-        body: AnimatedBuilder(
-          animation: storage,
-          builder: (contexxt, _) {
-            return Text(storage.content);
-          },
+        body: Column(
+          children: [
+            Text('Token:'),
+            ValueListenableBuilder(
+              valueListenable: connector.token,
+              builder: (context, data, __) {
+                return SelectableText('$data');
+              },
+            ),
+            Expanded(
+              child: AnimatedBuilder(
+                animation: storage,
+                builder: (context, _) {
+                  return Text(storage.content);
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
 }
 
-Future<dynamic> onPush(Map<String, dynamic> data) {
-  storage.append('onPush: $data');
+Future<dynamic> onPush(String name, Map<String, dynamic> data) {
+  storage.append('$name: $data');
   return Future.value();
 }
 
-Future<dynamic> onBackgroundPush(Map<String, dynamic> data) async {
-  storage.append('onBackgroundPush: $data');
-  return Future.value();
-}
+Future<dynamic> _onBackgroundMessage(Map<String, dynamic> data) =>
+    onPush('onBackgroundMessage', data);

@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/services.dart';
-import 'package:flutter_apns/connector.dart';
+import 'package:flutter_apns/src/connector.dart';
 import 'package:flutter/foundation.dart';
 import 'package:huawei_push/push.dart';
 import 'package:huawei_push/constants/channel.dart' as Channel;
