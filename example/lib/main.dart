@@ -15,12 +15,16 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final PushConnector connector = createPushConnector();
+  PushConnector connector;
 
   @override
   void initState() {
     super.initState();
+    initPushConnector();
+  }
 
+  initPushConnector() async {
+    connector = await createPushConnector();
     connector.configure(
       onLaunch: (data) => onPush('onLaunch', data),
       onResume: (data) => onPush('onResume', data),
@@ -44,7 +48,7 @@ class _MyAppState extends State<MyApp> {
           children: [
             Text('Token:'),
             ValueListenableBuilder(
-              valueListenable: connector.token,
+              valueListenable: connector?.token,
               builder: (context, data, __) {
                 return SelectableText('$data');
               },

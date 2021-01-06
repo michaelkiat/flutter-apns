@@ -10,12 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  firebase_messaging:
-    git:
-      url: https://github.com/silentchee/flutterfire.git
-      ref: dynamic_firebase_configuration
-      path: packages/firebase_messaging
-  # huawei_push:
+  firebase_messaging: ^7.0.3
   huawei_push:
     git:
       url: https://github.com/silentchee/hms-flutter-plugin.git

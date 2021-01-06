@@ -1,6 +1,6 @@
 name: flutter_apns_example
 description: Demonstrates how to use the flutter_apns plugin.
-publish_to: 'none'
+publish_to: "none"
 version: 1.0.0+1
 
 environment:
@@ -13,7 +13,7 @@ dependencies:
   cupertino_icons: ^0.1.2
   path_provider: ^1.3.0
 
-  flutter_local_notifications: ^1.4.3
+  flutter_local_notifications: ^3.0.2
   flutter_apns:
     path: ../
 
