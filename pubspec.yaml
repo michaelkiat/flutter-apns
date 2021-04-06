@@ -5,17 +5,17 @@ homepage: https://github.com/mwaylabs/flutter-apns
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
-  flutter: ">=1.10.0 <2.0.0"
+  flutter: ^2.0.3
 
 dependencies:
   flutter:
     sdk: flutter
-  firebase_messaging: ^7.0.3
+  firebase_messaging: ^9.1.0
   huawei_push:
     git:
       url: https://github.com/silentchee/hms-flutter-plugin.git
       path: flutter-hms-push
-  google_api_availability: ^2.0.4
+  google_api_availability: ^3.0.1
 
 dev_dependencies:
   flutter_test:
