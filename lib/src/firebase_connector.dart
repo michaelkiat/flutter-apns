@@ -25,7 +25,7 @@ class FirebasePushConnector extends PushConnector {
   final isDisabledByUser = ValueNotifier(false);
 
   @override
-  void configure({onMessage, onLaunch, onResume, onBackgroundMessage}) {
+  void configure({onMessage, onLaunch, onResume, onBackgroundMessage}) async {
     firebaseOnBackgroundMessage = onBackgroundMessage;
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       onMessage(getFirebaseMessageMap(message));
@@ -42,6 +42,10 @@ class FirebasePushConnector extends PushConnector {
     FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
     _firebase.onTokenRefresh.listen((value) {
+      token.value = value;
+    });
+
+    _firebase.getToken().then((value) {
       token.value = value;
     });
   }
