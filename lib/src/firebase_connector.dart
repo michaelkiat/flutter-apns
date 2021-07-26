@@ -2,36 +2,36 @@ import 'package:flutter_apns/src/connector.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 
+Map<String, dynamic> getFirebaseMessageMap(RemoteMessage message) {
+  return {
+    'notification': {
+      'title': message?.notification?.title,
+      'body': message?.notification?.body,
+    },
+    'data': message.data,
+  };
+}
+
+MessageHandler firebaseOnBackgroundMessage;
+
+Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  firebaseOnBackgroundMessage(getFirebaseMessageMap(message));
+}
+
 class FirebasePushConnector extends PushConnector {
   final _firebase = FirebaseMessaging.instance;
-  MessageHandler _onBackgroundMessage;
 
   @override
   final isDisabledByUser = ValueNotifier(false);
 
-  Map<String, dynamic> _getMessageMap(RemoteMessage message) {
-    return {
-      'notification': {
-        'title': message?.notification?.title,
-        'body': message?.notification?.body,
-      },
-      'data': message.data,
-    };
-  }
-
-  Future<void> _firebaseMessagingBackgroundHandler(
-      RemoteMessage message) async {
-    _onBackgroundMessage(_getMessageMap(message));
-  }
-
   @override
   void configure({onMessage, onLaunch, onResume, onBackgroundMessage}) {
-    _onBackgroundMessage = onBackgroundMessage;
+    firebaseOnBackgroundMessage = onBackgroundMessage;
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      onMessage(_getMessageMap(message));
+      onMessage(getFirebaseMessageMap(message));
     });
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      final messageMap = _getMessageMap(message);
+      final messageMap = getFirebaseMessageMap(message);
       if (onLaunch != null) {
         onLaunch(messageMap);
       } else if (onResume != null) {
@@ -39,7 +39,7 @@ class FirebasePushConnector extends PushConnector {
       }
     });
 
-    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+    FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
     _firebase.onTokenRefresh.listen((value) {
       token.value = value;
