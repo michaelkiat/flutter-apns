@@ -3,6 +3,24 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:firebase_core/firebase_core.dart';
 
+Map<String, dynamic> getFirebaseMessageMap(RemoteMessage message) {
+  return {
+    'notification': {
+      'title': message.notification?.title,
+      'body': message.notification?.body,
+    },
+    'data': message.data,
+  };
+}
+
+MessageHandler? firebaseOnBackgroundMessage;
+
+Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  if (firebaseOnBackgroundMessage != null) {
+    firebaseOnBackgroundMessage!(getFirebaseMessageMap(message));
+  }
+}
+
 class FirebasePushConnector extends PushConnector {
   late final firebase = FirebaseMessaging.instance;
 
@@ -12,12 +30,8 @@ class FirebasePushConnector extends PushConnector {
   bool didInitialize = false;
 
   @override
-  void configure({
-    MessageHandler? onMessage,
-    MessageHandler? onLaunch,
-    MessageHandler? onResume,
-    MessageHandler? onBackgroundMessage,
-  }) async {
+  void configure({onMessage, onLaunch, onResume, onBackgroundMessage}) async {
+    firebaseOnBackgroundMessage = onBackgroundMessage;
     if (!didInitialize) {
       await Firebase.initializeApp();
       didInitialize = true;
@@ -27,16 +41,24 @@ class FirebasePushConnector extends PushConnector {
       token.value = value;
     });
 
-    FirebaseMessaging.onMessage.listen(onMessage);
-    FirebaseMessaging.onMessageOpenedApp.listen(onResume);
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      if (onMessage != null) onMessage(getFirebaseMessageMap(message));
+    });
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      final messageMap = getFirebaseMessageMap(message);
+      if (onResume != null) {
+        onResume(messageMap);
+      }
+    });
 
     if (onBackgroundMessage != null) {
-      FirebaseMessaging.onBackgroundMessage(onBackgroundMessage);
+      FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
     }
 
     final initial = await FirebaseMessaging.instance.getInitialMessage();
     if (initial != null) {
-      onLaunch?.call(initial);
+      final messageMap = getFirebaseMessageMap(initial);
+      onLaunch?.call(messageMap);
     }
 
     token.value = await firebase.getToken();

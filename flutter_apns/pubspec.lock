@@ -114,6 +114,22 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  google_api_availability:
+    dependency: "direct main"
+    description:
+      name: google_api_availability
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.1"
+  huawei_push:
+    dependency: "direct main"
+    description:
+      path: flutter-hms-push
+      ref: HEAD
+      resolved-ref: "952269e661ddb3afd56252622a40a5704cee8100"
+      url: "https://github.com/silentchee/hms-flutter-plugin.git"
+    source: git
+    version: "4.0.4+300"
   js:
     dependency: transitive
     description:
@@ -212,4 +228,4 @@ packages:
     version: "2.1.0"
 sdks:
   dart: ">=2.12.0 <3.0.0"
-  flutter: ">=1.12.13+hotfix.5"
+  flutter: ">=1.12.13+hotfix.6"

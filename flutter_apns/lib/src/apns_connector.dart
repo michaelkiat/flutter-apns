@@ -1,4 +1,3 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_apns_only/flutter_apns_only.dart';
 export 'package:flutter_apns_only/flutter_apns_only.dart';
 
@@ -12,7 +11,7 @@ class ApnsPushConnector extends ApnsPushConnectorOnly implements PushConnector {
         return null;
       }
 
-      return (apnsMessage) => input(RemoteMessage.fromMap(apnsMessage.payload));
+      return (apnsMessage) => input(apnsMessage.payload);
     }
 
     configureApns(
