@@ -22,7 +22,8 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 }
 
 class FirebasePushConnector extends PushConnector {
-  var firebase = FirebaseMessaging.instance;
+  FirebaseMessaging _firebase;
+  FirebaseMessaging get firebase => _firebase ?? FirebaseMessaging.instance;
 
   @override
   final isDisabledByUser = ValueNotifier(false);
