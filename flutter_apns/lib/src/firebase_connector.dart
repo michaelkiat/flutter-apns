@@ -1,7 +1,7 @@
 import 'package:flutter_apns/src/connector.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
-// import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 Map<String, dynamic> getFirebaseMessageMap(RemoteMessage message) {
   return {
@@ -27,15 +27,15 @@ class FirebasePushConnector extends PushConnector {
   @override
   final isDisabledByUser = ValueNotifier(false);
 
-  // bool didInitialize = false;
+  bool didInitialize = false;
 
   @override
   void configure({onMessage, onLaunch, onResume, onBackgroundMessage}) async {
     firebaseOnBackgroundMessage = onBackgroundMessage;
-    // if (!didInitialize) {
-    //   await Firebase.initializeApp();
-    //   didInitialize = true;
-    // }
+    if (!didInitialize) {
+      await Firebase.initializeApp();
+      didInitialize = true;
+    }
 
     firebase.onTokenRefresh.listen((value) {
       token.value = value;
@@ -69,10 +69,10 @@ class FirebasePushConnector extends PushConnector {
 
   @override
   void requestNotificationPermissions() async {
-    // if (!didInitialize) {
-    //   await Firebase.initializeApp();
-    //   didInitialize = true;
-    // }
+    if (!didInitialize) {
+      await Firebase.initializeApp();
+      didInitialize = true;
+    }
 
     firebase.requestPermission(
       alert: true,
