@@ -9,7 +9,7 @@ class ApnsRemoteMessage {
 
   final Map<String, dynamic> payload;
 
-  String? get actionIdentifier => UNNotificationAction.getIdentifier(payload);
+  String get actionIdentifier => UNNotificationAction.getIdentifier(payload);
 }
 
 typedef ApnsMessageHandler = Future<void> Function(ApnsRemoteMessage);
@@ -21,9 +21,9 @@ class ApnsPushConnectorOnly {
         'ApnsPushConnectorOnly can only be created on iOS platform!');
     return const MethodChannel('flutter_apns');
   }();
-  ApnsMessageHandler? _onMessage;
-  ApnsMessageHandler? _onLaunch;
-  ApnsMessageHandler? _onResume;
+  ApnsMessageHandler _onMessage;
+  ApnsMessageHandler _onLaunch;
+  ApnsMessageHandler _onResume;
 
   void requestNotificationPermissions(
       [IosNotificationSettings iosSettings = const IosNotificationSettings()]) {
@@ -44,10 +44,10 @@ class ApnsPushConnectorOnly {
 
   /// Sets up [MessageHandler] for incoming messages.
   void configureApns({
-    ApnsMessageHandler? onMessage,
-    ApnsMessageHandler? onLaunch,
-    ApnsMessageHandler? onResume,
-    ApnsMessageHandler? onBackgroundMessage,
+    ApnsMessageHandler onMessage,
+    ApnsMessageHandler onLaunch,
+    ApnsMessageHandler onResume,
+    ApnsMessageHandler onBackgroundMessage,
   }) {
     _onMessage = onMessage;
     _onLaunch = onLaunch;
@@ -95,13 +95,13 @@ class ApnsPushConnectorOnly {
 
   /// Handler that returns true/false to decide if push alert should be displayed when in foreground.
   /// Returning true will delay onMessage callback until user actually clicks on it
-  WillPresentHandler? shouldPresent;
+  WillPresentHandler shouldPresent;
 
   final isDisabledByUser = ValueNotifier(false);
 
-  final authorizationStatus = ValueNotifier<String?>(null);
+  final authorizationStatus = ValueNotifier<String>(null);
 
-  final token = ValueNotifier<String?>(null);
+  final token = ValueNotifier<String>(null);
 
   String get providerType => "APNS";
 
@@ -136,12 +136,12 @@ class IosNotificationSettings {
         alert = settings['alert'],
         badge = settings['badge'];
 
-  final bool? sound;
-  final bool? alert;
-  final bool? badge;
+  final bool sound;
+  final bool alert;
+  final bool badge;
 
   Map<String, dynamic> toMap() {
-    return <String, bool?>{'sound': sound, 'alert': alert, 'badge': badge};
+    return <String, bool>{'sound': sound, 'alert': alert, 'badge': badge};
   }
 
   @override
@@ -165,10 +165,10 @@ class UNNotificationCategory {
   }
 
   UNNotificationCategory({
-    required this.identifier,
-    required this.actions,
-    required this.intentIdentifiers,
-    required this.options,
+    @required this.identifier,
+    @required this.actions,
+    @required this.intentIdentifiers,
+    @required this.options,
   });
 }
 
@@ -183,15 +183,15 @@ class UNNotificationAction {
 
   /// Returns action identifier associated with this push.
   /// May be null, UNNotificationAction.defaultIdentifier, or value declared in setNotificationCategories
-  static String? getIdentifier(Map<String, dynamic> payload) {
-    final data = payload['data'] as Map?;
-    return data?['actionIdentifier'] ?? payload['actionIdentifier'];
+  static String getIdentifier(Map<String, dynamic> payload) {
+    final data = payload['data'] as Map;
+    return data['actionIdentifier'] ?? payload['actionIdentifier'];
   }
 
   UNNotificationAction({
-    required this.identifier,
-    required this.title,
-    required this.options,
+    @required this.identifier,
+    @required this.title,
+    @required this.options,
   });
 
   dynamic toJson() {

@@ -6,7 +6,7 @@ import 'connector.dart';
 class ApnsPushConnector extends ApnsPushConnectorOnly implements PushConnector {
   @override
   void configure({onMessage, onLaunch, onResume, onBackgroundMessage}) {
-    ApnsMessageHandler? mapHandler(MessageHandler? input) {
+    ApnsMessageHandler mapHandler(MessageHandler input) {
       if (input == null) {
         return null;
       }

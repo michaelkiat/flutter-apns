@@ -6,23 +6,23 @@ import 'package:flutter/foundation.dart';
 Map<String, dynamic> getFirebaseMessageMap(RemoteMessage message) {
   return {
     'notification': {
-      'title': message.notification?.title,
-      'body': message.notification?.body,
+      'title': message?.notification?.title,
+      'body': message?.notification?.body,
     },
-    'data': message.data,
+    'data': message?.data,
   };
 }
 
-MessageHandler? firebaseOnBackgroundMessage;
+MessageHandler firebaseOnBackgroundMessage;
 
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   if (firebaseOnBackgroundMessage != null) {
-    firebaseOnBackgroundMessage!(getFirebaseMessageMap(message));
+    firebaseOnBackgroundMessage(getFirebaseMessageMap(message));
   }
 }
 
 class FirebasePushConnector extends PushConnector {
-  late final firebase = FirebaseMessaging.instance;
+  var firebase = FirebaseMessaging.instance;
 
   @override
   final isDisabledByUser = ValueNotifier(false);
