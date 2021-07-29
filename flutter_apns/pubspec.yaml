@@ -13,10 +13,10 @@ dependencies:
   firebase_messaging: ^9.1.0
   flutter_apns_only: ^1.5.0-dev.1
   google_api_availability: ^3.0.1
-  huawei_push:
-    git:
-      url: https://github.com/silentchee/hms-flutter-plugin.git
-      path: flutter-hms-push
+  # huawei_push:
+  #   git:
+  #     url: https://github.com/silentchee/hms-flutter-plugin.git
+  #     path: flutter-hms-push
 
 dev_dependencies:
   flutter_test:
