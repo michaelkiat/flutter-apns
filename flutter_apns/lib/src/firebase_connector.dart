@@ -3,14 +3,16 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-Map<String, dynamic> getFirebaseMessageMap(RemoteMessage message) {
-  return {
-    'notification': {
-      'title': message?.notification?.title,
-      'body': message?.notification?.body,
-    },
-    'data': message?.data,
-  };
+extension RemoteMessageExt on RemoteMessage {
+  Map<String, dynamic> toMap() {
+    return {
+      'notification': {
+        'title': notification?.title,
+        'body': notification?.body,
+      },
+      'data': data,
+    };
+  }
 }
 
 class FirebasePushConnector extends PushConnector {
@@ -34,10 +36,10 @@ class FirebasePushConnector extends PushConnector {
     });
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      if (onMessage != null) onMessage(getFirebaseMessageMap(message));
+      if (onMessage != null) onMessage(message?.toMap());
     });
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      final messageMap = getFirebaseMessageMap(message);
+      final messageMap = (message?.toMap());
       if (onResume != null) {
         onResume(messageMap);
       }
@@ -49,7 +51,7 @@ class FirebasePushConnector extends PushConnector {
 
     final initial = await FirebaseMessaging.instance.getInitialMessage();
     if (initial != null) {
-      final messageMap = getFirebaseMessageMap(initial);
+      final messageMap = initial?.toMap();
       onLaunch?.call(messageMap);
     }
 
