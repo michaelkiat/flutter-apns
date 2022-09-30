@@ -13,14 +13,6 @@ Map<String, dynamic> getFirebaseMessageMap(RemoteMessage message) {
   };
 }
 
-MessageHandler firebaseOnBackgroundMessage;
-
-Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  if (firebaseOnBackgroundMessage != null) {
-    firebaseOnBackgroundMessage(getFirebaseMessageMap(message));
-  }
-}
-
 class FirebasePushConnector extends PushConnector {
   FirebaseMessaging _firebase;
   FirebaseMessaging get firebase => _firebase ?? FirebaseMessaging.instance;
@@ -32,7 +24,6 @@ class FirebasePushConnector extends PushConnector {
 
   @override
   void configure({onMessage, onLaunch, onResume, onBackgroundMessage}) async {
-    firebaseOnBackgroundMessage = onBackgroundMessage;
     if (!didInitialize) {
       await Firebase.initializeApp();
       didInitialize = true;
@@ -53,7 +44,7 @@ class FirebasePushConnector extends PushConnector {
     });
 
     if (onBackgroundMessage != null) {
-      FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+      FirebaseMessaging.onBackgroundMessage(onBackgroundMessage);
     }
 
     final initial = await FirebaseMessaging.instance.getInitialMessage();

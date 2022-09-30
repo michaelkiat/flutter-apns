@@ -24,7 +24,8 @@ abstract class PushConnector {
     MessageHandler onMessage,
     MessageHandler onLaunch,
     MessageHandler onResume,
-    MessageHandler onBackgroundMessage,
+    //firebase connector using -> Future<dynamic> FirebaseMessageHandler(RemoteMessage message);
+    dynamic onBackgroundMessage,
   });
 
   /// Prompts (if need) the user to enable push notifications.
