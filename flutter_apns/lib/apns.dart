@@ -10,6 +10,7 @@ import 'package:google_api_availability/google_api_availability.dart';
 export 'package:flutter_apns/src/connector.dart';
 export 'package:flutter_apns/src/apns_connector.dart';
 export 'package:flutter_apns/src/firebase_connector.dart';
+export 'package:flutter_apns/src/huawei_connector.dart';
 
 /// Creates either APNS or Firebase connector to manage the push notification registration.
 Future<PushConnector> createPushConnector() async {
