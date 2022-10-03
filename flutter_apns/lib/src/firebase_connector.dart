@@ -6,10 +6,12 @@ import 'package:firebase_core/firebase_core.dart';
 extension RemoteMessageExt on RemoteMessage {
   Map<String, dynamic> toMap() {
     return {
-      'notification': {
-        'title': notification?.title,
-        'body': notification?.body,
-      },
+      'notification': notification != null
+          ? {
+              'title': notification?.title,
+              'body': notification?.body,
+            }
+          : null,
       'data': data,
     };
   }
