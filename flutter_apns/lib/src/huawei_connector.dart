@@ -22,12 +22,36 @@ class HuaweiPushConnector extends PushConnector {
     }, onError: (error) {
       token.value = null;
     });
-    DataMessageEventChannel.receiveBroadcastStream().listen((data) {
-      if (onMessage != null)
-        onMessage({
-          "data": json.decode(data),
-        });
-    }, onError: (error) {});
+    DataMessageEventChannel.receiveBroadcastStream().listen(
+      (data) {
+        print(
+            '[HuaweiPushConnector] receiveBroadcastStream listen data ==> $data');
+        print(
+            '[HuaweiPushConnector] receiveBroadcastStream onMessage != null ==> ${onMessage != null}');
+        print(
+            '[HuaweiPushConnector] receiveBroadcastStream onLaunch != null ==> ${onLaunch != null}');
+        print(
+            '[HuaweiPushConnector] receiveBroadcastStream onResume != null ==> ${onResume != null}');
+        print(
+            '[HuaweiPushConnector] receiveBroadcastStream onBackgroundMessage != null ==> ${onBackgroundMessage != null}');
+
+        if (onMessage != null) {
+          print(
+              '[HuaweiPushConnector] configure json.decode(data) runtimeType ==> ${json.decode(data)?.runtimeType}');
+          print(
+              '[HuaweiPushConnector] configure json.decode(data) ==> ${json.decode(data)}');
+
+          onMessage({
+            "data": json.decode(data),
+          });
+        }
+      },
+      onError: (error) {
+        print('[HuaweiPushConnector] onError ==> $error');
+      },
+    );
+    print(
+        '[HuaweiPushConnector] configure onBackgroundMessage != null ==> ${onBackgroundMessage != null}');
     if (onBackgroundMessage != null) {
       Push.setOnBackgroundMsgHandle(onBackgroundMessage);
     }
