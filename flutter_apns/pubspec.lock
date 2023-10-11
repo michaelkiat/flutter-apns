@@ -103,7 +103,7 @@ packages:
       name: flutter_apns_only
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.6.0"
+    version: "1.5.0-dev.1"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -126,7 +126,7 @@ packages:
     description:
       path: flutter-hms-push
       ref: HEAD
-      resolved-ref: "313d14e140743e4a36bbe328bdd2a6beaf379a14"
+      resolved-ref: "952269e661ddb3afd56252622a40a5704cee8100"
       url: "https://github.com/silentchee/hms-flutter-plugin.git"
     source: git
     version: "4.0.4+300"
@@ -164,7 +164,7 @@ packages:
       name: plugin_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.3"
+    version: "2.0.0"
   sky_engine:
     dependency: transitive
     description: flutter
